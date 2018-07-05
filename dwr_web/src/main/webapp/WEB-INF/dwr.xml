@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC
+          "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN"
+          "http://getahead.org/dwr/dwr30.dtd">
+<dwr>
+	<allow>
+		<!-- <create creator="new" javascript="MessagePush">
+			<param name="class" value="com.yoodb.service.MessagePush" />
+		</create>
+		<create creator="new" javascript="TestPush">
+			<param name="class" value="com.yoodb.service.TestPush" />
+		</create> -->
+		<create creator="new" javascript="PushAllClient">
+			<param name="class" value="dwr.push.PushAllClient" />
+		</create>
+	</allow>
+</dwr>
