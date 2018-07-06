@@ -20,7 +20,7 @@
     function onPageLoad() {  
     	dwr.engine.setActiveReverseAjax(true);
     	dwr.engine.setNotifyServerOnPageUnload(true);
-    	ScriptSessionManager.init();
+    	ScriptSessionManager.init('1');
     }
     function connectSuccess(ip) {  
     	var div = document.getElementById("ip");
@@ -34,7 +34,6 @@
 <body onload="onPageLoad()">
 <input type="button" value="Send" onclick="testPush()"  /> 
 <input type="text" value="" id="text"/>
-<br/>
 ip地址：<div id="ip"></div> 
 </body>
 </html>

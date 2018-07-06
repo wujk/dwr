@@ -4,7 +4,8 @@ public class ConnectBean {
 
 	private String id;
 	private String ip;
-	private String type;
+	private String group;
+	private String sessionId;
 
 	public String getId() {
 		return id;
@@ -22,12 +23,20 @@ public class ConnectBean {
 		this.ip = ip;
 	}
 
-	public String getType() {
-		return type;
+	public String getGroup() {
+		return group;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }

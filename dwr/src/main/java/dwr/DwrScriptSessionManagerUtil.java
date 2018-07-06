@@ -1,9 +1,7 @@
 package dwr;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.directwebremoting.Container;
 import org.directwebremoting.ScriptBuffer;
@@ -15,54 +13,57 @@ import org.directwebremoting.event.ScriptSessionListener;
 import org.directwebremoting.extend.ScriptSessionManager;
 
 public class DwrScriptSessionManagerUtil {
-		
-	public void initScriptSession(String type) {
+
+	public void initScriptSession(String group) {
 		ScriptSessionPool pool = ScriptSessionPool.getInstance();
 		Container cantainer = ServerContextFactory.get().getContainer();
 		ScriptSessionManager manager = cantainer.getBean(ScriptSessionManager.class);
 		manager.addScriptSessionListener(new ScriptSessionListener() {
-			
+
 			@Override
 			public void sessionDestroyed(ScriptSessionEvent ev) {
-				ScriptSession scriptSession = pool.removeScriptSession(ev.getSession());
-				if (scriptSession == null) return;
-				String ip = (String) scriptSession.getAttribute("VISIT_IP");
-				if (ip != null) {
-					System.out.println("ip地址：" + ip);
-					ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("connectDestory", ip);
-					scriptSession.addScript(script);
-					scriptSession.removeAttribute("VISIT_IP");
+				HttpSession httpSession = WebContextFactory.get().getSession();
+				ScriptSession scriptSession = ev.getSession();
+				if (scriptSession == null)
+					return;
+				String httpSessionId = httpSession.getId();
+				String _httpSessionId = (String) scriptSession.getAttribute(Constants.HTTPSESSIONID);
+				if (httpSessionId != null && httpSessionId.equals(_httpSessionId)) {
+					String ip = (String) scriptSession.getAttribute(Constants.VISITIP);
+					if (ip != null) {
+						System.out.println("销毁ip地址：" + ip);
+					}
+					System.out.println("httpSessionId地址：" + httpSessionId);
+					pool.removeScriptSession(scriptSession);
 				}
 				System.out.println("ScriptSession销毁");
 			}
-			
+
 			@Override
 			public void sessionCreated(ScriptSessionEvent ev) {
 				HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
+				HttpSession httpSession = WebContextFactory.get().getSession();
 				String ip = request.getHeader("X-Real-IP");
 				if (ip == null) {
 					ip = request.getRemoteAddr();
 				}
 				System.out.println("ip地址：" + ip);
-				ScriptSession scriptSession = pool.addScriptSession(ev.getSession());
-				if (scriptSession == null) return;
-				
-				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("managerConnect", pool.managerScriptSession());
-				List<ScriptSession> list = pool.getTypeScriptSession("0");
-				for (ScriptSession _scriptSession : list) {
-					_scriptSession.addScript(script);
-				}
-				String oldIp = (String) scriptSession.getAttribute("VISIT_IP");
-				if (oldIp != null &&  oldIp.equals(ip)) {
+				ScriptSession scriptSession = ev.getSession();
+				if (scriptSession == null)
+					return;
+				String oldIp = (String) scriptSession.getAttribute(Constants.VISITIP);
+				if (oldIp != null && oldIp.equals(ip)) {
 					return;
 				}
-				scriptSession.setAttribute("TYPE", type);
-				scriptSession.setAttribute("VISIT_IP", ip);
-				script = DwrScriptbufferUtil.genScriptBuffer("connectSuccess", ip);
-				scriptSession.addScript(script );
+				scriptSession.setAttribute(Constants.GROUP, group);
+				scriptSession.setAttribute(Constants.VISITIP, ip);
+				scriptSession.setAttribute(Constants.HTTPSESSIONID, httpSession != null ? httpSession.getId() : null);
+				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("connectSuccess", ip);
+				scriptSession.addScript(script);
+				pool.addScriptSession(scriptSession);
 				System.out.println("ScriptSession创建");
 			}
 		});
 	}
-	
+
 }
