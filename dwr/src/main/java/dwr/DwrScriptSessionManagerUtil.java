@@ -1,5 +1,8 @@
 package dwr;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.directwebremoting.Container;
@@ -13,7 +16,7 @@ import org.directwebremoting.extend.ScriptSessionManager;
 
 public class DwrScriptSessionManagerUtil {
 		
-	public void initScriptSession() {
+	public void initScriptSession(String type) {
 		ScriptSessionPool pool = ScriptSessionPool.getInstance();
 		Container cantainer = ServerContextFactory.get().getContainer();
 		ScriptSessionManager manager = cantainer.getBean(ScriptSessionManager.class);
@@ -43,11 +46,23 @@ public class DwrScriptSessionManagerUtil {
 				System.out.println("ip地址：" + ip);
 				ScriptSession scriptSession = pool.addScriptSession(ev.getSession());
 				if (scriptSession == null) return;
+				
+				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("managerConnect", pool.managerScriptSession());
+				List<ScriptSession> list = pool.getTypeScriptSession("0");
+				for (ScriptSession _scriptSession : list) {
+					_scriptSession.addScript(script);
+				}
+				String oldIp = (String) scriptSession.getAttribute("VISIT_IP");
+				if (oldIp != null &&  oldIp.equals(ip)) {
+					return;
+				}
+				scriptSession.setAttribute("TYPE", type);
 				scriptSession.setAttribute("VISIT_IP", ip);
-				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("connectSuccess", ip);
+				script = DwrScriptbufferUtil.genScriptBuffer("connectSuccess", ip);
 				scriptSession.addScript(script );
 				System.out.println("ScriptSession创建");
 			}
 		});
 	}
+	
 }

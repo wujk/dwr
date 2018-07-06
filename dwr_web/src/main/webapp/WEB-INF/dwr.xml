@@ -10,6 +10,7 @@
 		<create creator="new" javascript="ScriptSessionManager">
 			<param name="class" value="dwr.push.ScriptSessionManager" />
 		</create>
-		<convert convertor="collection" match="java.util.Collection"/>
+		<convertor convertor="collection" match="java.util.Collection"/>
+		<convertor convertor="bean" match="dwr.ConnectBean"/>
 	</allow>
 </dwr>
