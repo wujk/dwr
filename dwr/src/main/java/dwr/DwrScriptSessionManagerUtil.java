@@ -14,36 +14,39 @@ import org.directwebremoting.extend.ScriptSessionManager;
 public class DwrScriptSessionManagerUtil {
 		
 	public void initScriptSession() {
+		ScriptSessionPool pool = ScriptSessionPool.getInstance();
 		Container cantainer = ServerContextFactory.get().getContainer();
 		ScriptSessionManager manager = cantainer.getBean(ScriptSessionManager.class);
 		manager.addScriptSessionListener(new ScriptSessionListener() {
 			
 			@Override
 			public void sessionDestroyed(ScriptSessionEvent ev) {
-				System.out.println("ScriptSession销毁");
-				ScriptSession scriptSession = ev.getSession();
+				ScriptSession scriptSession = pool.removeScriptSession(ev.getSession());
+				if (scriptSession == null) return;
 				String ip = (String) scriptSession.getAttribute("VISIT_IP");
-				ScriptBuffer script = new ScriptBuffer("connectDestory('"+ ip +"')");
-				scriptSession.addScript(script );
+				if (ip != null) {
+					System.out.println("ip地址：" + ip);
+					ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("connectDestory", ip);
+					scriptSession.addScript(script);
+					scriptSession.removeAttribute("VISIT_IP");
+				}
+				System.out.println("ScriptSession销毁");
 			}
 			
 			@Override
 			public void sessionCreated(ScriptSessionEvent ev) {
-				System.out.println("ScriptSession创建");
 				HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
 				String ip = request.getHeader("X-Real-IP");
 				if (ip == null) {
 					ip = request.getRemoteAddr();
 				}
 				System.out.println("ip地址：" + ip);
-				ScriptSession scriptSession = ev.getSession();
-				String oldIp = (String) scriptSession.getAttribute("VISIT_IP");
-				if (oldIp != null &&  oldIp.equals(ip)) {
-					return;
-				}
+				ScriptSession scriptSession = pool.addScriptSession(ev.getSession());
+				if (scriptSession == null) return;
 				scriptSession.setAttribute("VISIT_IP", ip);
-				ScriptBuffer script = new ScriptBuffer("connectSuccess('"+ ip +"')");
+				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer("connectSuccess", ip);
 				scriptSession.addScript(script );
+				System.out.println("ScriptSession创建");
 			}
 		});
 	}

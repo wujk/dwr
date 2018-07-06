@@ -22,7 +22,6 @@
     	ScriptSessionManager.init();
     }
     function connectSuccess(ip) {  
-    	alert(ip + "建立连接");
     	var div = document.getElementById("ip");
     	var p = document.createElement("p");
     	p.setAttribute("name", ip);
@@ -31,8 +30,6 @@
     }
     function connectDestory(ip) {  
     	alert(ip + "销毁连接");
-    	var div = document.getElementById("ip");
-    	div.removeChild("<p>"+ip+"</p>");
     }  
     </script>  
 
