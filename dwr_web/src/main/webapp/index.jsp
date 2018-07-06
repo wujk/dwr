@@ -10,29 +10,35 @@
 <script type="text/javascript" src="dwr_web/interface/PushAllClient.js"></script>
 <script type="text/javascript" src="dwr_web/interface/ScriptSessionManager.js"></script>
 <script type="text/javascript">  
-      
     function testPush() {  
     	PushAllClient.pushAll("showMessage","www.yoodb.com");  
-    }  
+    } 
     function showMessage(msg) {  
     	alert(msg);
     }
-    
+    function onPageLoad() {  
+    	dwr.engine.setActiveReverseAjax(true);
+    	dwr.engine.setNotifyServerOnPageUnload(true);
+    	ScriptSessionManager.init();
+    }
     function connectSuccess(ip) {  
     	alert(ip + "建立连接");
-    	var div = document.getElementById("ip"); 
-    	div.removeChild("<p>"+ip+"</p>")
+    	var div = document.getElementById("ip");
+    	var p = document.createElement("p");
+    	p.setAttribute("name", ip);
+    	p.innerHTML = ip;
+    	div.appendChild(p);
     }
-    function connectDestory(msg) {  
-    	alert(msg + "销毁连接");
-    	var div = document.getElementById("ip");  
-    	div.appendChild("<p>"+ip+"</p>")
+    function connectDestory(ip) {  
+    	alert(ip + "销毁连接");
+    	var div = document.getElementById("ip");
+    	div.removeChild("<p>"+ip+"</p>");
     }  
     </script>  
 
 </head>
-<body onload="ScriptSessionManager.init();dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true);">
+<body onload="onPageLoad()">
 <input type="button" value="Send" onclick="testPush()"  /> 
-<div id="ip"></div> 
+ip地址：<div id="ip"></div> 
 </body>
 </html>

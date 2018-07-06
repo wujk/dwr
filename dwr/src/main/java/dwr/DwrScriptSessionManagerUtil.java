@@ -23,7 +23,7 @@ public class DwrScriptSessionManagerUtil {
 				System.out.println("ScriptSession销毁");
 				ScriptSession scriptSession = ev.getSession();
 				String ip = (String) scriptSession.getAttribute("VISIT_IP");
-				ScriptBuffer script = new ScriptBuffer("connectDestory("+ ip +")");
+				ScriptBuffer script = new ScriptBuffer("connectDestory('"+ ip +"')");
 				scriptSession.addScript(script );
 			}
 			
@@ -32,9 +32,17 @@ public class DwrScriptSessionManagerUtil {
 				System.out.println("ScriptSession创建");
 				HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
 				String ip = request.getHeader("X-Real-IP");
+				if (ip == null) {
+					ip = request.getRemoteAddr();
+				}
+				System.out.println("ip地址：" + ip);
 				ScriptSession scriptSession = ev.getSession();
+				String oldIp = (String) scriptSession.getAttribute("VISIT_IP");
+				if (oldIp != null &&  oldIp.equals(ip)) {
+					return;
+				}
 				scriptSession.setAttribute("VISIT_IP", ip);
-				ScriptBuffer script = new ScriptBuffer("connectSuccess("+ ip +")");
+				ScriptBuffer script = new ScriptBuffer("connectSuccess('"+ ip +"')");
 				scriptSession.addScript(script );
 			}
 		});
