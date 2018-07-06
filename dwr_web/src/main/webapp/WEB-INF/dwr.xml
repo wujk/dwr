@@ -7,10 +7,11 @@
 		<create creator="new" javascript="PushAllClient">
 			<param name="class" value="dwr.push.PushAllClient" />
 		</create>
+		<create creator="new" javascript="PushGroupClient">
+			<param name="class" value="dwr.push.PushGroupClient" />
+		</create>
 		<create creator="new" javascript="ScriptSessionManager">
 			<param name="class" value="dwr.push.ScriptSessionManager" />
 		</create>
-		<convert converter="collection" match="java.util.Collection"/>
-		<convert converter="bean" match="dwr.ConnectBean"/>
 	</allow>
 </dwr>

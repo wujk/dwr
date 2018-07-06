@@ -12,7 +12,7 @@
 <script type="text/javascript">  
     function testPush() {  
     	var value = document.getElementById("text").value;
-    	PushAllClient.pushAll("showMessage",value);  
+    	//PushAllClient.pushAll("showMessage",value);  
     } 
     function showMessage(msg) {  
     	alert(msg);
@@ -20,14 +20,21 @@
     function onPageLoad() {  
     	dwr.engine.setActiveReverseAjax(true);
     	dwr.engine.setNotifyServerOnPageUnload(true);
-    	ScriptSessionManager.init('0');
+    	ScriptSessionManager.initManager();
     }
     function connectSuccess(ip) {  
     	var div = document.getElementById("ip");
+    	while (div.hasChildNodes()) //当div下还存在子节点时 循环继续
+		{
+			div.removeChild(div.firstChild);
+		}
     	var p = document.createElement("p");
     	p.setAttribute("name", ip);
     	p.innerHTML = ip;
     	div.appendChild(p);
+    }
+    function hasConnect(msg) {
+    	alert("已经在组内"+ msg);
     }
     </script>  
 </head>
