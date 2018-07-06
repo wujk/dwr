@@ -1,9 +1,24 @@
 package dwr;
 
-import org.directwebremoting.ScriptSessions;
+import java.util.Collection;
+
+import org.directwebremoting.Browser;
+import org.directwebremoting.ScriptBuffer;
+import org.directwebremoting.ScriptSession;
 
 public class PushAll {
 	public void sendAll(String funcName, String msg) {
-		ScriptSessions.addFunctionCall(funcName, msg);
+
+		Browser.withAllSessions(new Runnable() {
+
+			@Override
+			public void run() {
+				ScriptBuffer script = DwrScriptbufferUtil.genScriptBuffer(funcName, msg);
+				Collection<ScriptSession> sessions = Browser.getTargetSessions();
+				for (ScriptSession scriptSession : sessions) {
+					scriptSession.addScript(script);
+				}
+			}
+		});
 	}
 }
