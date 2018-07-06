@@ -8,6 +8,7 @@
 <script type="text/javascript" src="dwr_web/engine.js"></script>
 <script type="text/javascript" src="dwr_web/util.js"></script>
 <script type="text/javascript" src="dwr_web/interface/PushAllClient.js"></script>
+<script type="text/javascript" src="dwr_web/interface/ScriptSessionManager.js"></script>
 <script type="text/javascript">  
       
     function testPush() {  
@@ -15,11 +16,23 @@
     }  
     function showMessage(msg) {  
     	alert(msg);
+    }
+    
+    function connectSuccess(ip) {  
+    	alert(ip + "建立连接");
+    	var div = document.getElementById("ip"); 
+    	div.removeChild("<p>"+ip+"</p>")
+    }
+    function connectDestory(msg) {  
+    	alert(msg + "销毁连接");
+    	var div = document.getElementById("ip");  
+    	div.appendChild("<p>"+ip+"</p>")
     }  
     </script>  
 
 </head>
-<body onload="dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true);">
-<input type="button" value="Send" onclick="testPush()"  />  
+<body onload="ScriptSessionManager.init();dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true);">
+<input type="button" value="Send" onclick="testPush()"  /> 
+<div id="ip"></div> 
 </body>
 </html>

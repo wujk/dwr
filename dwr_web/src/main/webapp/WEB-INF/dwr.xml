@@ -13,5 +13,8 @@
 		<create creator="new" javascript="PushAllClient">
 			<param name="class" value="dwr.push.PushAllClient" />
 		</create>
+		<create creator="new" javascript="ScriptSessionManager">
+			<param name="class" value="dwr.push.ScriptSessionManager" />
+		</create>
 	</allow>
 </dwr>
