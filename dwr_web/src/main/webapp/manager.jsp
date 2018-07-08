@@ -7,12 +7,12 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="dwr_web/engine.js"></script>
 <script type="text/javascript" src="dwr_web/util.js"></script>
-<script type="text/javascript" src="dwr_web/interface/PushAllClient.js"></script>
-<script type="text/javascript" src="dwr_web/interface/ScriptSessionManager.js"></script>
+<script type="text/javascript" src="dwr_web/interface/PushGroupClient.js"></script>
+<script type="text/javascript" src="dwr_web/interface/ScriptSessionGroup.js"></script>
 <script type="text/javascript">  
     function testPush() {  
     	var value = document.getElementById("text").value;
-    	//PushAllClient.pushAll("showMessage",value);  
+    	PushGroupClient.sendGroup('common', "showMessage",value);    
     } 
     function showMessage(msg) {  
     	alert(msg);
@@ -20,7 +20,7 @@
     function onPageLoad() {  
     	dwr.engine.setActiveReverseAjax(true);
     	dwr.engine.setNotifyServerOnPageUnload(true);
-    	ScriptSessionManager.initManager();
+    	ScriptSessionGroup.initData("super");
     }
     function connectSuccess(ip) {  
     	var div = document.getElementById("ip");
@@ -33,8 +33,11 @@
     	p.innerHTML = ip;
     	div.appendChild(p);
     }
-    function hasConnect(msg) {
+    function showGroup(msg) {
     	alert("已经在组内"+ msg);
+    }
+    function changeGroup(oldGroup, newGroup) {
+    	alert("组变更"+ oldGroup + "到" + newGroup);
     }
     </script>  
 </head>

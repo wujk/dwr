@@ -4,10 +4,8 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
-import org.directwebremoting.Browser;
 import org.directwebremoting.ScriptBuffer;
 import org.directwebremoting.ScriptSession;
-import org.directwebremoting.ScriptSessionFilter;
 import org.directwebremoting.WebContextFactory;
 
 public class PushGroup {

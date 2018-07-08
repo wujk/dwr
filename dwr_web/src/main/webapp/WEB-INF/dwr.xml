@@ -10,8 +10,8 @@
 		<create creator="new" javascript="PushGroupClient">
 			<param name="class" value="dwr.push.PushGroupClient" />
 		</create>
-		<create creator="new" javascript="ScriptSessionManager">
-			<param name="class" value="dwr.push.ScriptSessionManager" />
+		<create creator="new" javascript="ScriptSessionGroup">
+			<param name="class" value="dwr.push.ScriptSessionGroup" />
 		</create>
 	</allow>
 </dwr>

@@ -1,6 +1,4 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,7 +10,7 @@
 <script type="text/javascript">  
     function testPush() {  
     	var value = document.getElementById("text").value;
-    	PushGroupClient.sendGroup('super', "showMessage",value);  
+    	PushGroupClient.sendGroup('common', "showMessage",value);    
     } 
     function showMessage(msg) {  
     	alert(msg);
@@ -20,7 +18,7 @@
     function onPageLoad() {  
     	dwr.engine.setActiveReverseAjax(true);
     	dwr.engine.setNotifyServerOnPageUnload(true);
-    	ScriptSessionGroup.initData("common");
+    	ScriptSessionGroup.initData("super");
     }
     function connectSuccess(ip) {  
     	var div = document.getElementById("ip");
