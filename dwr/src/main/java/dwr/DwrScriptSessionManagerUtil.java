@@ -9,7 +9,12 @@ import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.event.ScriptSessionEvent;
 import org.directwebremoting.event.ScriptSessionListener;
 import org.directwebremoting.impl.DefaultScriptSessionManager;
-
+/**
+ * 创建初始化监听，此时session可能未被创建或还是上次创建的session 需要更新session需要调用ScriptAndHttpSessionManager此方法主要更新新session到scriptSession
+ * 如果在jsp页面可以在java脚本中先调用session赋值
+ * @author admin
+ *
+ */
 public class DwrScriptSessionManagerUtil extends DefaultScriptSessionManager {
 	
 	public DwrScriptSessionManagerUtil() {

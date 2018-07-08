@@ -17,6 +17,7 @@ public class PushAll {
 
 			@Override
 			public boolean match(ScriptSession session) {
+				// 过滤除自己以外的所有页面
 				HttpSession httpSession = WebContextFactory.get().getSession();
 				return !httpSession.getId().equals(session.getAttribute(Constants.HTTPSESSIONID)); // 不发给自己
 			}

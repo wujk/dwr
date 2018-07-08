@@ -8,7 +8,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.directwebremoting.ScriptSession;
-
+/**
+ * 用来存放scripSession的池子单列模式（利用静态代码块只初始化加载一次保证单例）
+ * @author admin
+ *
+ */
 public class ScriptSessionPool {
 	
 	private static class InitPool {
